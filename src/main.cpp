@@ -17,6 +17,7 @@ constexpr float SCREEN_MARGIN_RIGHT = SCREEN_WIDTH - SCREEN_MARGIN_TOP;
 constexpr float PADDLE_RIGHT_POSITION_X = SCREEN_MARGIN_RIGHT - PADDLE_WIDTH;
 constexpr float ZERO = 0.f;
 float acceleration = 25.f;
+
 int main() {
     auto window = sf::RenderWindow(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "CMake SFML Project");
     window.setFramerateLimit(144);
@@ -27,10 +28,6 @@ int main() {
 
     sf::RectangleShape pad_right({PADDLE_WIDTH, PADDLE_HEIGHT});
     pad_right.setFillColor(sf::Color::White);
-
-    // get the size of the window
-    sf::Vector2u size = window.getSize();
-    const auto [WINDOW_WIDTH, WINDOW_HEIGHT] = size;
 
     pad_left.move({SCREEN_MARGIN_LEFT, SCREEN_MARGIN_TOP});
     pad_right.move({PADDLE_RIGHT_POSITION_X, SCREEN_MARGIN_TOP});
@@ -56,8 +53,8 @@ int main() {
                 }
                 // Left Paddle Up
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::S)) {
-                    if (const auto [x, y] = pad_left.getPosition(); y < SCREEN_HEIGHT - PADDLE_HEIGHT - acceleration) {
-                        const sf::Vector2f position = pad_left.getPosition();
+                    const sf::Vector2f position = pad_left.getPosition();
+                    if (const auto [x, y] = position; y < SCREEN_HEIGHT - PADDLE_HEIGHT - acceleration) {
                         pad_left.move({ZERO, acceleration});
                     } else {
                         pad_left.setPosition({SCREEN_MARGIN_LEFT, SCREEN_HEIGHT - PADDLE_HEIGHT});
@@ -90,7 +87,6 @@ int main() {
                         pad_right.setPosition({SCREEN_MARGIN_RIGHT - PADDLE_WIDTH, ZERO});
                     }
                 }
-
             }
         }
 
