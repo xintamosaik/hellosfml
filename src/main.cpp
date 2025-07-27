@@ -64,6 +64,13 @@ int main() {
 
             right_up = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up);
             right_down = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down);
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+            {
+                sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+                const auto [x,y] = localPosition;
+                std::cout << x << ' ' << y << '\n';
+            }
         } // END POLL EVENT
 
         if (left_up && pad_left.getPosition().y >= 0) {
