@@ -18,80 +18,60 @@ constexpr float PADDLE_RIGHT_POSITION_X = SCREEN_MARGIN_RIGHT - PADDLE_WIDTH;
 constexpr float ZERO = 0.f;
 float acceleration = 25.f;
 
+bool left_up = false;
+bool left_down = false;
+
+bool right_up = false;
+bool right_down = false;
+
 int main() {
-    auto window = sf::RenderWindow(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "CMake SFML Project");
+    auto window = sf::RenderWindow(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "CMake SFML Project - PONG Clone");
     window.setFramerateLimit(144);
     window.setVerticalSyncEnabled(true);
 
     sf::RectangleShape pad_left({PADDLE_WIDTH, PADDLE_HEIGHT});
     pad_left.setFillColor(sf::Color::White);
+    pad_left.move({SCREEN_MARGIN_LEFT, SCREEN_MARGIN_TOP});
 
     sf::RectangleShape pad_right({PADDLE_WIDTH, PADDLE_HEIGHT});
     pad_right.setFillColor(sf::Color::White);
-
-    pad_left.move({SCREEN_MARGIN_LEFT, SCREEN_MARGIN_TOP});
     pad_right.move({PADDLE_RIGHT_POSITION_X, SCREEN_MARGIN_TOP});
+
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
-            } else if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+                return EXIT_SUCCESS;
+            }
+            if (const auto *keyPressed = event->getIf<sf::Event::KeyPressed>()) {
                 if (keyPressed->scancode == sf::Keyboard::Scancode::Escape) {
-                    std::cout << "the escape key was pressed" << std::endl;
-                    std::cout << "scancode: " << static_cast<int>(keyPressed->scancode) << std::endl;
-                    std::cout << "code: " << static_cast<int>(keyPressed->code) << std::endl;
-                    std::cout << "control: " << keyPressed->control << std::endl;
-                    std::cout << "alt: " << keyPressed->alt << std::endl;
-                    std::cout << "shift: " << keyPressed->shift << std::endl;
-                    std::cout << "system: " << keyPressed->system << std::endl;
-                    std::cout << "description: " << sf::Keyboard::getDescription(keyPressed->scancode).toAnsiString() <<
-                            std::endl;
-                    std::cout << "localize: " << static_cast<int>(sf::Keyboard::localize(keyPressed->scancode)) <<
-                            std::endl;
-                    std::cout << "delocalize: " << static_cast<int>(sf::Keyboard::delocalize(keyPressed->code)) <<
-                            std::endl;
-                }
-                // Left Paddle Up
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::S)) {
-                    const sf::Vector2f position = pad_left.getPosition();
-                    if (const auto [x, y] = position; y < SCREEN_HEIGHT - PADDLE_HEIGHT - acceleration) {
-                        pad_left.move({ZERO, acceleration});
-                    } else {
-                        pad_left.setPosition({SCREEN_MARGIN_LEFT, SCREEN_HEIGHT - PADDLE_HEIGHT});
-                    }
-                }
-                // Left Paddle Down
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::W)) {
-                    const sf::Vector2f position = pad_left.getPosition();
-                    if (const auto [x, y] = position; y > acceleration) {
-                        pad_left.move({ZERO, -acceleration});
-                    } else {
-                        pad_left.setPosition({SCREEN_MARGIN_LEFT, ZERO});
-                    }
-                }
-                // Right Paddle Up
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
-                    const sf::Vector2f position = pad_right.getPosition();
-                    if (const auto [x, y] = position; y < SCREEN_HEIGHT - PADDLE_HEIGHT - acceleration) {
-                        pad_right.move({ZERO, acceleration});
-                    } else {
-                        pad_right.setPosition({SCREEN_MARGIN_RIGHT - PADDLE_WIDTH, SCREEN_HEIGHT - PADDLE_HEIGHT});
-                    }
-                }
-                // Right Paddle Down
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
-                    const sf::Vector2f position = pad_right.getPosition(); // = (15, 55)
-                    if (const auto [x, y] = position; y > acceleration) {
-                        pad_right.move({ZERO, -acceleration});
-                    } else {
-                        pad_right.setPosition({SCREEN_MARGIN_RIGHT - PADDLE_WIDTH, ZERO});
-                    }
+                    window.close();
+                    return EXIT_SUCCESS;
                 }
             }
+
+            left_up = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::W);
+            left_down = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::S);
+
+            right_up = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up);
+            right_down = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down);
+        }
+
+        if (left_up && pad_left.getPosition().y >= 0) {
+            pad_left.move({ZERO, acceleration * -1});
+        }
+        if (left_down && pad_left.getPosition().y <= SCREEN_HEIGHT - PADDLE_HEIGHT) {
+            pad_left.move({ZERO, acceleration});
+        }
+
+        if (right_up && pad_right.getPosition().y >= 0) {
+            pad_right.move({ZERO, acceleration * -1});
+        }
+        if (right_down && pad_right.getPosition().y <= SCREEN_HEIGHT - PADDLE_HEIGHT) {
+            pad_right.move({ZERO, acceleration});
         }
 
         window.clear(sf::Color::Black);
-
         window.draw(pad_left);
         window.draw(pad_right);
         window.display();
