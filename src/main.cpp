@@ -1,14 +1,23 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+const float PADDLE_HEIGHT = 300.f;
+const float PADDLE_WIDTH = 60.f;
 
+const float SCREEN_MARGIN = 25.f;
+const float SCREEN_MARGIN_SIDES = 50.f;
 int main() {
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
     window.setFramerateLimit(144);
     window.setVerticalSyncEnabled(true);
 
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    sf::RectangleShape shape({ PADDLE_WIDTH, PADDLE_HEIGHT });
+    shape.setFillColor(sf::Color::White);
 
+    // get the size of the window
+    sf::Vector2u size = window.getSize();
+    const auto [WINDOW_WIDTH, WINDOW_HEIGHT] = size;
+
+    shape.move({SCREEN_MARGIN_SIDES,  SCREEN_MARGIN});
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
@@ -30,14 +39,28 @@ int main() {
                             std::endl;
                 }
                 // by key code
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-                    shape.move({-5.f, 0.f});
-                    std::cout << "left pressed" << std::endl;
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
+                    if (const auto [x, y] = shape.getPosition(); y < WINDOW_HEIGHT - PADDLE_HEIGHT) {
+                        const sf::Vector2f position = shape.getPosition(); // = (15, 55)
+                        shape.move({0.f, 25.f});
+                    } else {
+                        shape.setPosition({SCREEN_MARGIN_SIDES, WINDOW_HEIGHT - 300.f});
+                    }
+
+
+
                 }
                 // by scan code
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right)) {
-                    shape.move({5.f, 0.f});
-                    std::cout << "right pressed" << std::endl;
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
+
+                    const sf::Vector2f position = shape.getPosition(); // = (15, 55)
+                    if (const auto [x, y] = position; y > 0) {
+                        shape.move({0.f, -25.f});
+                    } else {
+                        shape.setPosition({SCREEN_MARGIN_SIDES, 0.f});
+                    }
+
+
                 }
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
                     std::cout << "the left mouse button was pressed" << std::endl;
