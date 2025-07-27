@@ -11,14 +11,14 @@ int main() {
     window.setFramerateLimit(144);
     window.setVerticalSyncEnabled(true);
 
-    sf::RectangleShape shape({ PADDLE_WIDTH, PADDLE_HEIGHT });
+    sf::RectangleShape shape({PADDLE_WIDTH, PADDLE_HEIGHT});
     shape.setFillColor(sf::Color::White);
 
     // get the size of the window
     sf::Vector2u size = window.getSize();
     const auto [WINDOW_WIDTH, WINDOW_HEIGHT] = size;
 
-    shape.move({SCREEN_MARGIN_SIDES,  SCREEN_MARGIN});
+    shape.move({SCREEN_MARGIN_SIDES, SCREEN_MARGIN});
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
@@ -47,21 +47,15 @@ int main() {
                     } else {
                         shape.setPosition({SCREEN_MARGIN_SIDES, WINDOW_HEIGHT - 300.f});
                     }
-
-
-
                 }
                 // by scan code
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
-
                     const sf::Vector2f position = shape.getPosition(); // = (15, 55)
                     if (const auto [x, y] = position; y > 0) {
                         shape.move({0.f, -25.f});
                     } else {
                         shape.setPosition({SCREEN_MARGIN_SIDES, 0.f});
                     }
-
-
                 }
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
                     std::cout << "the left mouse button was pressed" << std::endl;
@@ -70,8 +64,6 @@ int main() {
         }
 
         window.clear(sf::Color::Black);
-
-        // move the entity relatively to its current position
 
         window.draw(shape);
         window.display();
