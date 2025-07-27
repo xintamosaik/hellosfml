@@ -16,6 +16,7 @@ constexpr float SCREEN_MARGIN_RIGHT = SCREEN_WIDTH - SCREEN_MARGIN_TOP;
 
 constexpr float PADDLE_RIGHT_POSITION_X = SCREEN_MARGIN_RIGHT - PADDLE_WIDTH;
 
+float acceleration = 25.f;
 int main() {
     auto window = sf::RenderWindow(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "CMake SFML Project");
     window.setFramerateLimit(144);
@@ -57,16 +58,16 @@ int main() {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::S)) {
                     if (const auto [x, y] = pad_left.getPosition(); y < SCREEN_HEIGHT - PADDLE_HEIGHT) {
                         const sf::Vector2f position = pad_left.getPosition();
-                        pad_left.move({0.f, 25.f});
+                        pad_left.move({0.f, acceleration});
                     } else {
-                        pad_left.setPosition({SCREEN_MARGIN_LEFT, SCREEN_HEIGHT - 300.f});
+                        pad_left.setPosition({SCREEN_MARGIN_LEFT, SCREEN_HEIGHT - PADDLE_HEIGHT});
                     }
                 }
                 // Left Paddle Down
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::W)) {
                     const sf::Vector2f position = pad_left.getPosition();
                     if (const auto [x, y] = position; y > 0) {
-                        pad_left.move({0.f, -25.f});
+                        pad_left.move({0.f, -acceleration});
                     } else {
                         pad_left.setPosition({SCREEN_MARGIN_LEFT, 0.f});
                     }
@@ -75,16 +76,16 @@ int main() {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
                     const sf::Vector2f position = pad_right.getPosition();
                     if (const auto [x, y] = position; y < SCREEN_HEIGHT - PADDLE_HEIGHT) {
-                        pad_right.move({0.f, 25.f});
+                        pad_right.move({0.f, acceleration});
                     } else {
-                        pad_right.setPosition({SCREEN_MARGIN_LEFT, SCREEN_HEIGHT - 300.f});
+                        pad_right.setPosition({SCREEN_MARGIN_LEFT, SCREEN_HEIGHT - PADDLE_HEIGHT});
                     }
                 }
                 // Right Paddle Down
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
                     const sf::Vector2f position = pad_right.getPosition(); // = (15, 55)
                     if (const auto [x, y] = position; y > 0) {
-                        pad_right.move({0.f, -25.f});
+                        pad_right.move({0.f, -acceleration});
                     } else {
                         pad_right.setPosition({SCREEN_MARGIN_LEFT, 0.f});
                     }
