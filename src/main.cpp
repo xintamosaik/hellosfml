@@ -1,10 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-const float PADDLE_HEIGHT = 300.f;
-const float PADDLE_WIDTH = 60.f;
+constexpr float PADDLE_HEIGHT = 300.f;
+constexpr float PADDLE_WIDTH = 60.f;
 
-const float SCREEN_MARGIN = 25.f;
-const float SCREEN_MARGIN_SIDES = 50.f;
+constexpr float SCREEN_MARGIN = 25.f;
+constexpr float SCREEN_MARGIN_SIDES = 50.f;
+
 int main() {
     auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
     window.setFramerateLimit(144);
