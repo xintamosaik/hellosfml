@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+
 constexpr unsigned WINDOW_WIDTH = 1290;
 constexpr unsigned WINDOW_HEIGHT = 1080;
 
@@ -25,7 +26,15 @@ bool right_up = false;
 bool right_down = false;
 
 int main() {
-    auto window = sf::RenderWindow(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "CMake SFML Project - PONG Clone");
+    sf::RenderWindow window;
+    try {
+        window = sf::RenderWindow(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "CMake SFML Project - PONG Clone");
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what() << '\n';
+        return EXIT_FAILURE;
+    }
+
     window.setFramerateLimit(144);
     window.setVerticalSyncEnabled(true);
 
@@ -55,7 +64,7 @@ int main() {
 
             right_up = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up);
             right_down = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down);
-        }
+        } // END POLL EVENT
 
         if (left_up && pad_left.getPosition().y >= 0) {
             pad_left.move({ZERO, acceleration * -1});
