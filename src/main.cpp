@@ -6,9 +6,14 @@ int main() {
     window.setFramerateLimit(144);
     window.setVerticalSyncEnabled(true);
 
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    sf::RectangleShape shape({ 60.f, 300.f });
+    shape.setFillColor(sf::Color::White);
 
+    // get the size of the window
+    sf::Vector2u size = window.getSize();
+    const auto [WINDOW_WIDTH, WINDOW_HEIGHT] = size;
+
+    shape.move({50.f, 25.f});
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
@@ -30,14 +35,22 @@ int main() {
                             std::endl;
                 }
                 // by key code
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-                    shape.move({-5.f, 0.f});
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
+                    shape.move({0.f, 25.f});
+
                     std::cout << "left pressed" << std::endl;
                 }
                 // by scan code
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right)) {
-                    shape.move({5.f, 0.f});
-                    std::cout << "right pressed" << std::endl;
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
+
+                    const sf::Vector2f position = shape.getPosition(); // = (15, 55)
+                    if (const auto [x, y] = position; y > 0) {
+                        shape.move({0.f, -25.f});
+                    } else {
+                        shape.setPosition({50.f, 0.f});
+                    }
+                    std::cout << "Up: " << shape.getPosition().x << ", " << shape.getPosition().y << std::endl;
+
                 }
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
                     std::cout << "the left mouse button was pressed" << std::endl;
