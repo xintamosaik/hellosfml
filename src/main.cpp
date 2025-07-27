@@ -11,14 +11,18 @@ int main() {
     window.setFramerateLimit(144);
     window.setVerticalSyncEnabled(true);
 
-    sf::RectangleShape shape({PADDLE_WIDTH, PADDLE_HEIGHT});
-    shape.setFillColor(sf::Color::White);
+    sf::RectangleShape pad_left({PADDLE_WIDTH, PADDLE_HEIGHT});
+    pad_left.setFillColor(sf::Color::White);
+
+    sf::RectangleShape pad_right({PADDLE_WIDTH, PADDLE_HEIGHT});
+    pad_right.setFillColor(sf::Color::White);
 
     // get the size of the window
     sf::Vector2u size = window.getSize();
     const auto [WINDOW_WIDTH, WINDOW_HEIGHT] = size;
 
-    shape.move({SCREEN_MARGIN_SIDES, SCREEN_MARGIN});
+    pad_left.move({SCREEN_MARGIN_SIDES, SCREEN_MARGIN});
+    pad_right.move({WINDOW_WIDTH - PADDLE_WIDTH - SCREEN_MARGIN_SIDES, SCREEN_MARGIN});
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
@@ -41,20 +45,20 @@ int main() {
                 }
                 // by key code
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
-                    if (const auto [x, y] = shape.getPosition(); y < WINDOW_HEIGHT - PADDLE_HEIGHT) {
-                        const sf::Vector2f position = shape.getPosition(); // = (15, 55)
-                        shape.move({0.f, 25.f});
+                    if (const auto [x, y] = pad_left.getPosition(); y < WINDOW_HEIGHT - PADDLE_HEIGHT) {
+                        const sf::Vector2f position = pad_left.getPosition(); // = (15, 55)
+                        pad_left.move({0.f, 25.f});
                     } else {
-                        shape.setPosition({SCREEN_MARGIN_SIDES, WINDOW_HEIGHT - 300.f});
+                        pad_left.setPosition({SCREEN_MARGIN_SIDES, WINDOW_HEIGHT - 300.f});
                     }
                 }
                 // by scan code
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
-                    const sf::Vector2f position = shape.getPosition(); // = (15, 55)
+                    const sf::Vector2f position = pad_left.getPosition(); // = (15, 55)
                     if (const auto [x, y] = position; y > 0) {
-                        shape.move({0.f, -25.f});
+                        pad_left.move({0.f, -25.f});
                     } else {
-                        shape.setPosition({SCREEN_MARGIN_SIDES, 0.f});
+                        pad_left.setPosition({SCREEN_MARGIN_SIDES, 0.f});
                     }
                 }
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
@@ -65,7 +69,8 @@ int main() {
 
         window.clear(sf::Color::Black);
 
-        window.draw(shape);
+        window.draw(pad_left);
+        window.draw(pad_right);
         window.display();
     }
 }
