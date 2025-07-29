@@ -25,12 +25,23 @@ bool left_down = false;
 bool right_up = false;
 bool right_down = false;
 
+bool ball_moving = false;
+
+enum Direction {
+    NONE,
+    TOP_RIGHT,
+    TOP_LEFT,
+    BOTTOM_RIGHT,
+    BOTTOM_LEFT,
+};
+
+char ball_direction = BOTTOM_RIGHT;
+
 int main() {
     sf::RenderWindow window;
     try {
         window = sf::RenderWindow(sf::VideoMode({WINDOW_WIDTH, WINDOW_HEIGHT}), "CMake SFML Project - PONG Clone");
-    }
-    catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
         return EXIT_FAILURE;
     }
@@ -46,6 +57,10 @@ int main() {
     pad_right.setFillColor(sf::Color::White);
     pad_right.move({PADDLE_RIGHT_POSITION_X, SCREEN_MARGIN_TOP});
 
+    sf::CircleShape ball(20.f);
+    ball.setFillColor(sf::Color::White);
+    ball.setPosition({SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2});
+
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
@@ -57,6 +72,9 @@ int main() {
                     window.close();
                     return EXIT_SUCCESS;
                 }
+                if (keyPressed->scancode == sf::Keyboard::Scancode::Space) {
+                    ball_moving = true;
+                }
             }
 
             left_up = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::W);
@@ -65,8 +83,7 @@ int main() {
             right_up = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up);
             right_down = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down);
 
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-            {
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
                 sf::Vector2i localPosition = sf::Mouse::getPosition(window);
                 const auto [x,y] = localPosition;
                 std::cout << x << ' ' << y << '\n';
@@ -87,9 +104,29 @@ int main() {
             pad_right.move({ZERO, acceleration});
         }
 
+        switch (ball_direction) {
+            case NONE:
+                break;
+            case TOP_LEFT:
+                ball.move({-1.f, -1.f});
+                break;
+            case TOP_RIGHT:
+                ball.move({1.f, -1.f});
+                break;
+            case BOTTOM_LEFT:
+                ball.move({-1.f, 1.f});
+                break;
+            case BOTTOM_RIGHT:
+                ball.move({1.f, 1.f});
+                break;
+            default:
+                break;
+        }
+
         window.clear(sf::Color::Black);
         window.draw(pad_left);
         window.draw(pad_right);
+        window.draw(ball);
         window.display();
     }
 }
