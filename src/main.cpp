@@ -17,8 +17,9 @@ constexpr float SCREEN_MARGIN_RIGHT = SCREEN_WIDTH - SCREEN_MARGIN_TOP;
 
 constexpr float PADDLE_RIGHT_POSITION_X = SCREEN_MARGIN_RIGHT - PADDLE_WIDTH;
 constexpr float ZERO = 0.f;
-float acceleration = 25.f;
-
+float speed_paddle = 25.f;
+float speed_ball = 5.f;
+float speed_ball_vertical = 3.f;
 bool left_up = false;
 bool left_down = false;
 
@@ -35,7 +36,7 @@ enum Direction {
     BOTTOM_LEFT,
 };
 
-char ball_direction = BOTTOM_RIGHT;
+char ball_direction = TOP_RIGHT;
 
 int main() {
     sf::RenderWindow window;
@@ -91,33 +92,33 @@ int main() {
         } // END POLL EVENT
 
         if (left_up && pad_left.getPosition().y >= 0) {
-            pad_left.move({ZERO, acceleration * -1});
+            pad_left.move({ZERO, speed_paddle * -1});
         }
         if (left_down && pad_left.getPosition().y <= SCREEN_HEIGHT - PADDLE_HEIGHT) {
-            pad_left.move({ZERO, acceleration});
+            pad_left.move({ZERO, speed_paddle});
         }
 
         if (right_up && pad_right.getPosition().y >= 0) {
-            pad_right.move({ZERO, acceleration * -1});
+            pad_right.move({ZERO, speed_paddle * -1});
         }
         if (right_down && pad_right.getPosition().y <= SCREEN_HEIGHT - PADDLE_HEIGHT) {
-            pad_right.move({ZERO, acceleration});
+            pad_right.move({ZERO, speed_paddle});
         }
 
         switch (ball_direction) {
             case NONE:
                 break;
             case TOP_LEFT:
-                ball.move({-1.f, -1.f});
+                ball.move({-speed_ball, -speed_ball_vertical});
                 break;
             case TOP_RIGHT:
-                ball.move({1.f, -1.f});
+                ball.move({speed_ball, -speed_ball_vertical});
                 break;
             case BOTTOM_LEFT:
-                ball.move({-1.f, 1.f});
+                ball.move({-speed_ball, speed_ball_vertical});
                 break;
             case BOTTOM_RIGHT:
-                ball.move({1.f, 1.f});
+                ball.move({speed_ball, speed_ball_vertical});
                 break;
             default:
                 break;
