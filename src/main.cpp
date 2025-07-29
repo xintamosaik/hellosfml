@@ -2,24 +2,28 @@
 #include <iostream>
 
 constexpr unsigned WINDOW_WIDTH = 1290;
-constexpr unsigned WINDOW_HEIGHT = 1080;
+constexpr unsigned WINDOW_HEIGHT = 900;
 
 constexpr float SCREEN_WIDTH = static_cast<float>(WINDOW_WIDTH);
 constexpr float SCREEN_HEIGHT = static_cast<float>(WINDOW_HEIGHT);
-
-constexpr float PADDLE_HEIGHT = 300.f;
-constexpr float PADDLE_WIDTH = 60.f;
-
 constexpr float SCREEN_MARGIN_TOP = 25.f;
 constexpr float SCREEN_MARGIN_BOTTOM = SCREEN_HEIGHT - 25.f;
 constexpr float SCREEN_MARGIN_LEFT = 50.f;
 constexpr float SCREEN_MARGIN_RIGHT = SCREEN_WIDTH - SCREEN_MARGIN_TOP;
 
+constexpr float PADDLE_HEIGHT = 300.f;
+constexpr float PADDLE_WIDTH = 60.f;
 constexpr float PADDLE_RIGHT_POSITION_X = SCREEN_MARGIN_RIGHT - PADDLE_WIDTH;
+
 constexpr float ZERO = 0.f;
+
+constexpr float BALL_RADIUS = 20.f;
+constexpr float BALL_DIAMETER = BALL_RADIUS * 2;
+
 float speed_paddle = 25.f;
-float speed_ball = 5.f;
-float speed_ball_vertical = 3.f;
+float speed_ball = 1.f;
+float speed_ball_vertical = 5.f;
+
 bool left_up = false;
 bool left_down = false;
 
@@ -58,7 +62,7 @@ int main() {
     pad_right.setFillColor(sf::Color::White);
     pad_right.move({PADDLE_RIGHT_POSITION_X, SCREEN_MARGIN_TOP});
 
-    sf::CircleShape ball(20.f);
+    sf::CircleShape ball(BALL_RADIUS);
     ball.setFillColor(sf::Color::White);
     ball.setPosition({SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2});
 
@@ -104,6 +108,31 @@ int main() {
         if (right_down && pad_right.getPosition().y <= SCREEN_HEIGHT - PADDLE_HEIGHT) {
             pad_right.move({ZERO, speed_paddle});
         }
+
+        // ball collision walls
+        const auto [x,y] = ball.getPosition();
+        std::cout << x << ' ' << y << '\n';
+
+        if (y <= 0) {
+            if ( ball_direction == TOP_LEFT ) {
+                ball_direction = BOTTOM_LEFT;
+            }
+            if ( ball_direction == TOP_RIGHT ) {
+                ball_direction = BOTTOM_RIGHT;
+            }
+        }
+
+        if (y >= SCREEN_HEIGHT - BALL_DIAMETER) {
+            if ( ball_direction == BOTTOM_LEFT ) {
+                ball_direction = TOP_LEFT;
+            }
+            if ( ball_direction == BOTTOM_RIGHT ) {
+                ball_direction = TOP_RIGHT;
+            }
+        }
+
+
+
 
         switch (ball_direction) {
             case NONE:
