@@ -21,7 +21,7 @@ constexpr float BALL_RADIUS = 20.f;
 constexpr float BALL_DIAMETER = BALL_RADIUS * 2;
 
 float speed_paddle = 25.f;
-float speed_ball = 1.f;
+float speed_ball = 2.f;
 float speed_ball_vertical = 5.f;
 
 bool left_up = false;
@@ -111,7 +111,6 @@ int main() {
 
         // ball collision walls
         const auto [x,y] = ball.getPosition();
-        std::cout << x << ' ' << y << '\n';
 
         if (y <= 0) {
             if ( ball_direction == TOP_LEFT ) {
@@ -130,9 +129,6 @@ int main() {
                 ball_direction = TOP_RIGHT;
             }
         }
-
-
-
 
         switch (ball_direction) {
             case NONE:
