@@ -97,15 +97,16 @@ int main() {
                 std::cout << x << ' ' << y << '\n';
             }
         } // END POLL EVENT
-
-        if (left_up && pad_left.getPosition().y >= 0) {
+        const auto paddle_left_position = pad_left.getPosition();
+        if (left_up && paddle_left_position.y >= 0) {
             pad_left.move({ZERO, speed_paddle * -1});
         }
         if (left_down && pad_left.getPosition().y <= SCREEN_HEIGHT - PADDLE_HEIGHT) {
             pad_left.move({ZERO, speed_paddle});
         }
 
-        if (right_up && pad_right.getPosition().y >= 0) {
+        const auto paddle_right_position = pad_right.getPosition();
+        if (right_up && paddle_right_position.y >= 0) {
             pad_right.move({ZERO, speed_paddle * -1});
         }
         if (right_down && pad_right.getPosition().y <= SCREEN_HEIGHT - PADDLE_HEIGHT) {
@@ -133,23 +134,35 @@ int main() {
             }
         }
 
-        if (x <= PADDLE_LEFT_BOUNDARY ) {
-            if (ball_direction == TOP_LEFT) {
-                ball_direction = TOP_RIGHT;
-            }
+        if (x <= PADDLE_LEFT_BOUNDARY) {
+            if (y >= paddle_left_position.y && y <= paddle_left_position.y + PADDLE_HEIGHT) {
+                if (ball_direction == TOP_LEFT) {
+                    ball_direction = TOP_RIGHT;
+                }
 
-            if (ball_direction == BOTTOM_LEFT) {
-                ball_direction = BOTTOM_RIGHT;
+                if (ball_direction == BOTTOM_LEFT) {
+                    ball_direction = BOTTOM_RIGHT;
+                }
+            } else {
+                ball_moving = false;
+                ball_direction = NONE;
+                ball.setPosition({SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2});
             }
         }
 
         if (x >= PADDLE_RIGHT_BOUNDARY - BALL_DIAMETER) {
-            if (ball_direction == TOP_RIGHT) {
-                ball_direction = TOP_LEFT;
-            }
+            if (y >= paddle_right_position.y && y <= paddle_right_position.y + PADDLE_HEIGHT) {
+                if (ball_direction == TOP_RIGHT) {
+                    ball_direction = TOP_LEFT;
+                }
 
-            if (ball_direction == BOTTOM_RIGHT) {
-                ball_direction = BOTTOM_LEFT;
+                if (ball_direction == BOTTOM_RIGHT) {
+                    ball_direction = BOTTOM_LEFT;
+                }
+            } else {
+                ball_moving = false;
+                ball_direction = NONE;
+                ball.setPosition({SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2});
             }
         }
 
