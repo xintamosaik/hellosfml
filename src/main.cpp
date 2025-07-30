@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+constexpr float ZERO = 0.f;
+
 constexpr unsigned WINDOW_WIDTH = 1290;
 constexpr unsigned WINDOW_HEIGHT = 900;
 
@@ -13,15 +15,16 @@ constexpr float SCREEN_MARGIN_RIGHT = SCREEN_WIDTH - SCREEN_MARGIN_TOP;
 
 constexpr float PADDLE_HEIGHT = 300.f;
 constexpr float PADDLE_WIDTH = 60.f;
-constexpr float PADDLE_RIGHT_POSITION_X = SCREEN_MARGIN_RIGHT - PADDLE_WIDTH;
 
-constexpr float ZERO = 0.f;
+constexpr float PADDLE_RIGHT_POSITION_X = SCREEN_MARGIN_RIGHT - PADDLE_WIDTH;
+constexpr float PADDLE_LEFT_BOUNDARY = SCREEN_MARGIN_LEFT + PADDLE_WIDTH;
+constexpr float PADDLE_RIGHT_BOUNDARY = SCREEN_MARGIN_RIGHT - PADDLE_WIDTH;
 
 constexpr float BALL_RADIUS = 20.f;
 constexpr float BALL_DIAMETER = BALL_RADIUS * 2;
 
 float speed_paddle = 25.f;
-float speed_ball = 2.f;
+float speed_ball = 5.f;
 float speed_ball_vertical = 5.f;
 
 bool left_up = false;
@@ -130,7 +133,7 @@ int main() {
             }
         }
 
-        if (x <= 0) {
+        if (x <= PADDLE_LEFT_BOUNDARY ) {
             if (ball_direction == TOP_LEFT) {
                 ball_direction = TOP_RIGHT;
             }
@@ -140,7 +143,7 @@ int main() {
             }
         }
 
-        if (x >= SCREEN_WIDTH - BALL_DIAMETER) {
+        if (x >= PADDLE_RIGHT_BOUNDARY - BALL_DIAMETER) {
             if (ball_direction == TOP_RIGHT) {
                 ball_direction = TOP_LEFT;
             }
