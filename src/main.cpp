@@ -130,6 +130,27 @@ int main() {
             }
         }
 
+        if (x <= 0) {
+            if ( ball_direction == TOP_LEFT ) {
+                ball_direction = TOP_RIGHT;
+            }
+
+            if ( ball_direction == BOTTOM_LEFT ) {
+                ball_direction = BOTTOM_RIGHT;
+            }
+        }
+
+        if (x >= SCREEN_WIDTH - BALL_DIAMETER) {
+            if ( ball_direction ==  TOP_RIGHT) {
+                ball_direction = TOP_LEFT;
+            }
+
+            if ( ball_direction == BOTTOM_RIGHT  ) {
+                ball_direction = BOTTOM_LEFT ;
+            }
+        }
+
+
         switch (ball_direction) {
             case NONE:
                 break;
