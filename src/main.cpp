@@ -45,7 +45,7 @@ enum Direction {
     BOTTOM_LEFT,
 };
 
-char ball_direction = TOP_RIGHT;
+int ball_direction = TOP_RIGHT;
 
 int main() {
     sf::RenderWindow window;
@@ -85,7 +85,7 @@ int main() {
                 if (keyPressed->scancode == sf::Keyboard::Scancode::Space) {
                     ball_moving = true;
                     if (ball_direction == NONE) {
-                        const char new_direction = random % RANDOM_DIVISOR;
+                        const int new_direction = random % RANDOM_DIVISOR;
                         ball_direction = new_direction + 1;
                         random++;
                     }
