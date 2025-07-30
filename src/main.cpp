@@ -113,40 +113,40 @@ int main() {
         const auto [x,y] = ball.getPosition();
 
         if (y <= 0) {
-            if ( ball_direction == TOP_LEFT ) {
+            if (ball_direction == TOP_LEFT) {
                 ball_direction = BOTTOM_LEFT;
             }
-            if ( ball_direction == TOP_RIGHT ) {
+            if (ball_direction == TOP_RIGHT) {
                 ball_direction = BOTTOM_RIGHT;
             }
         }
 
         if (y >= SCREEN_HEIGHT - BALL_DIAMETER) {
-            if ( ball_direction == BOTTOM_LEFT ) {
+            if (ball_direction == BOTTOM_LEFT) {
                 ball_direction = TOP_LEFT;
             }
-            if ( ball_direction == BOTTOM_RIGHT ) {
+            if (ball_direction == BOTTOM_RIGHT) {
                 ball_direction = TOP_RIGHT;
             }
         }
 
         if (x <= 0) {
-            if ( ball_direction == TOP_LEFT ) {
+            if (ball_direction == TOP_LEFT) {
                 ball_direction = TOP_RIGHT;
             }
 
-            if ( ball_direction == BOTTOM_LEFT ) {
+            if (ball_direction == BOTTOM_LEFT) {
                 ball_direction = BOTTOM_RIGHT;
             }
         }
 
         if (x >= SCREEN_WIDTH - BALL_DIAMETER) {
-            if ( ball_direction ==  TOP_RIGHT) {
+            if (ball_direction == TOP_RIGHT) {
                 ball_direction = TOP_LEFT;
             }
 
-            if ( ball_direction == BOTTOM_RIGHT  ) {
-                ball_direction = BOTTOM_LEFT ;
+            if (ball_direction == BOTTOM_RIGHT) {
+                ball_direction = BOTTOM_LEFT;
             }
         }
 
