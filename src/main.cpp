@@ -35,7 +35,7 @@ bool right_down = false;
 
 bool ball_moving = false;
 int random = 0;
-constexpr int RANDOM_DIVISOR = 5;
+constexpr int RANDOM_DIVISOR = 4;
 
 enum Direction {
     NONE,
@@ -85,7 +85,7 @@ int main() {
                 if (keyPressed->scancode == sf::Keyboard::Scancode::Space) {
                     ball_moving = true;
                     if (ball_direction == NONE) {
-                        const int new_direction = random % RANDOM_DIVISOR;
+                        const char new_direction = random % RANDOM_DIVISOR;
                         ball_direction = new_direction + 1;
                         random++;
                     }
