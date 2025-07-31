@@ -24,8 +24,10 @@ constexpr float BALL_RADIUS = 20.f;
 constexpr float BALL_DIAMETER = BALL_RADIUS * 2;
 
 float speed_paddle = 25.f;
+
 float speed_ball = 5.f;
 float speed_ball_vertical = 5.f;
+float accelerator = 0.01f;
 
 bool left_up = false;
 bool left_down = false;
@@ -74,21 +76,13 @@ int main() {
     ball.setFillColor(sf::Color::White);
     ball.setPosition({SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2});
 
-
     const sf::Font font("FSEX302.ttF"); // Throws sf::Exception if an error occurs
     sf::Text text(font); // a font is required to make a text object
 
-    // set the string to display
     text.setString("0 : 0");
-
-    // set the character size
     text.setCharacterSize(96); // in pixels, not points!
-
-    // set the color
     text.setFillColor(sf::Color::White);
-
-    // set the text style
-    text.setStyle(sf::Text::Bold );
+    text.setStyle(sf::Text::Bold);
     text.setPosition({(SCREEN_WIDTH / 2) - 96, SCREEN_MARGIN_TOP});
 
     while (window.isOpen()) {
@@ -107,6 +101,8 @@ int main() {
                     if (ball_direction == NONE) {
                         const int new_direction = random % RANDOM_DIVISOR;
                         ball_direction = new_direction + 1;
+                        speed_ball = 5.f;
+                        speed_ball_vertical = 5.f;
                         random++;
                     }
                 }
@@ -118,11 +114,6 @@ int main() {
             right_up = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up);
             right_down = sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down);
 
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-                sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-                const auto [x,y] = localPosition;
-                std::cout << x << ' ' << y << '\n';
-            }
         } // END POLL EVENT
         const auto paddle_left_position = pad_left.getPosition();
         if (left_up && paddle_left_position.y >= 0) {
@@ -140,9 +131,7 @@ int main() {
             pad_right.move({ZERO, speed_paddle});
         }
 
-        // ball collision walls
         const auto [x,y] = ball.getPosition();
-
         if (y <= 0) {
             if (ball_direction == TOP_LEFT) {
                 ball_direction = BOTTOM_LEFT;
@@ -166,7 +155,6 @@ int main() {
                 if (ball_direction == TOP_LEFT) {
                     ball_direction = TOP_RIGHT;
                 }
-
                 if (ball_direction == BOTTOM_LEFT) {
                     ball_direction = BOTTOM_RIGHT;
                 }
@@ -195,7 +183,6 @@ int main() {
             }
         }
 
-
         switch (ball_direction) {
             case NONE:
                 break;
@@ -216,7 +203,8 @@ int main() {
         }
 
         window.clear(sf::Color::Black);
-        // inside the main loop, between window.clear() and window.display()
+        speed_ball += accelerator;
+        speed_ball_vertical += accelerator;
         text.setString(std::to_string(score_left) + " : " + std::to_string(score_right));
         window.draw(text);
         window.draw(pad_left);
