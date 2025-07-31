@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 
 constexpr float ZERO = 0.f;
@@ -85,6 +86,8 @@ int main() {
     text.setStyle(sf::Text::Bold);
     text.setPosition({(SCREEN_WIDTH / 2) - 96, SCREEN_MARGIN_TOP});
 
+    sf::SoundBuffer buffer("collectcoin.wav"); // Throws sf::Exception if an error occurs
+    sf::Sound sound(buffer);
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
@@ -135,18 +138,22 @@ int main() {
         if (y <= 0) {
             if (ball_direction == TOP_LEFT) {
                 ball_direction = BOTTOM_LEFT;
+                sound.play();
             }
             if (ball_direction == TOP_RIGHT) {
                 ball_direction = BOTTOM_RIGHT;
+                sound.play();
             }
         }
 
         if (y >= SCREEN_HEIGHT - BALL_DIAMETER) {
             if (ball_direction == BOTTOM_LEFT) {
                 ball_direction = TOP_LEFT;
+                sound.play();
             }
             if (ball_direction == BOTTOM_RIGHT) {
                 ball_direction = TOP_RIGHT;
+                sound.play();
             }
         }
 
@@ -154,9 +161,11 @@ int main() {
             if (y >= paddle_left_position.y && y <= paddle_left_position.y + PADDLE_HEIGHT) {
                 if (ball_direction == TOP_LEFT) {
                     ball_direction = TOP_RIGHT;
+                    sound.play();
                 }
                 if (ball_direction == BOTTOM_LEFT) {
                     ball_direction = BOTTOM_RIGHT;
+                    sound.play();
                 }
             } else {
                 score_right++;
@@ -170,10 +179,12 @@ int main() {
             if (y >= paddle_right_position.y && y <= paddle_right_position.y + PADDLE_HEIGHT) {
                 if (ball_direction == TOP_RIGHT) {
                     ball_direction = TOP_LEFT;
+                    sound.play();
                 }
 
                 if (ball_direction == BOTTOM_RIGHT) {
                     ball_direction = BOTTOM_LEFT;
+                    sound.play();
                 }
             } else {
                 score_left++;
