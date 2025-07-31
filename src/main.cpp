@@ -34,6 +34,9 @@ bool right_up = false;
 bool right_down = false;
 
 bool ball_moving = false;
+
+int score_left = 0;
+int score_right = 0;
 int random = 0;
 constexpr int RANDOM_DIVISOR = 4;
 
@@ -70,6 +73,23 @@ int main() {
     sf::CircleShape ball(BALL_RADIUS);
     ball.setFillColor(sf::Color::White);
     ball.setPosition({SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2});
+
+
+    const sf::Font font("FSEX302.ttF"); // Throws sf::Exception if an error occurs
+    sf::Text text(font); // a font is required to make a text object
+
+    // set the string to display
+    text.setString("0 : 0");
+
+    // set the character size
+    text.setCharacterSize(96); // in pixels, not points!
+
+    // set the color
+    text.setFillColor(sf::Color::White);
+
+    // set the text style
+    text.setStyle(sf::Text::Bold );
+    text.setPosition({(SCREEN_WIDTH / 2) - 96, SCREEN_MARGIN_TOP});
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
@@ -151,6 +171,7 @@ int main() {
                     ball_direction = BOTTOM_RIGHT;
                 }
             } else {
+                score_right++;
                 ball_moving = false;
                 ball_direction = NONE;
                 ball.setPosition({SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2});
@@ -167,6 +188,7 @@ int main() {
                     ball_direction = BOTTOM_LEFT;
                 }
             } else {
+                score_left++;
                 ball_moving = false;
                 ball_direction = NONE;
                 ball.setPosition({SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2});
@@ -194,6 +216,9 @@ int main() {
         }
 
         window.clear(sf::Color::Black);
+        // inside the main loop, between window.clear() and window.display()
+        text.setString(std::to_string(score_left) + " : " + std::to_string(score_right));
+        window.draw(text);
         window.draw(pad_left);
         window.draw(pad_right);
         window.draw(ball);
